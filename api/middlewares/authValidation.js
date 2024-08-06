@@ -2,6 +2,7 @@ import { body } from "express-validator";
 
 export const registerValidation = [
   body("email").isEmail().withMessage("Email is not valid"),
+
   body("username")
     .isLength({ min: 4 })
     .withMessage("Username must be at least 4 characters"),
