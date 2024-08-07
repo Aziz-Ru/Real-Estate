@@ -1,5 +1,6 @@
 "use strict";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import { config } from "dotenv";
 import expres, { json, urlencoded } from "express";
 import morgan from "morgan";
@@ -15,6 +16,7 @@ const app = expres();
 config();
 
 app.use(morgan("dev"));
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
 app.use(json());
 app.use(urlencoded({ extended: false }));
@@ -30,7 +32,6 @@ app.get("/api", (req, res) => {
     .cookie("test", "fkjfdsj", {
       expires: new Date(Date.now() + maxAge),
       httpOnly: true,
-      
     })
     .json({ msg: "Accepted" });
   res.clearCookie("test").send("Cookie clear");

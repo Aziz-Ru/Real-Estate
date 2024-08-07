@@ -1,8 +1,29 @@
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
+import { AuthContext } from "../../context/AuthContext";
+import apiRequest from "../../lib/apiRequest";
 import "./profilePage.scss";
-
 function ProfilePage() {
+  const { updateUser, currentUser } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      await apiRequest.post("/auth/logout");
+      updateUser(null);
+      navigate("/login");
+    } catch (err) {
+      setError(err.response.data.errors[0].msg);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div className="profilePage">
       <div className="details">
@@ -15,16 +36,20 @@ function ProfilePage() {
             <span>
               Avatar:
               <img
-                src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                src={currentUser.avatar ? currentUser.avatar : "/noavatar.png"}
                 alt=""
               />
             </span>
             <span>
-              Username: <b>John Doe</b>
+              Username: <b>{currentUser.username}</b>
             </span>
             <span>
-              E-mail: <b>john@gmail.com</b>
+              E-mail: <b>{currentUser.email}</b>
             </span>
+            <button disabled={isLoading} onClick={handleLogout}>
+              Logout
+            </button>
+            {error && <p>{error}</p>}
           </div>
           <div className="title">
             <h1>My List</h1>
@@ -39,7 +64,7 @@ function ProfilePage() {
       </div>
       <div className="chatContainer">
         <div className="wrapper">
-          <Chat/>
+          <Chat />
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ export const register = async (req, res) => {
     const existedUser = await User.findOne({ email: email });
 
     if (existedUser != null) {
-      return res.status(401).json({ errors: { msg: "Invalid Credentials" } });
+      return res.status(401).json({ errors: [{ msg: "Invalid Credentials" }] });
     } else {
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(password, salt);
@@ -17,7 +17,7 @@ export const register = async (req, res) => {
         email,
         username,
         password: hashPassword,
-        avatar: req.body.avatar ? req.body.avatar : username[0],
+        avatar: req.body.avatar ? req.body.avatar : "",
       });
 
       return res
@@ -25,7 +25,7 @@ export const register = async (req, res) => {
         .json({ newuser, msg: "Account Created Successfully" });
     }
   } catch (error) {
-    res.status(501).json({ errors: { msg: "Invalid Credential" } });
+    res.status(501).json({ errors: [{ msg: "Invalid Credentials" }] });
   }
 };
 
@@ -45,20 +45,26 @@ export const login = async (req, res) => {
           expiresIn: "7d",
         }
       );
+
       return res
         .cookie("__secure", token, {
           maxAge: age,
           httpOnly: true,
         })
         .status(200)
-        .json({ token, msg: "Login Successful" });
+        .json({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          avatar: user.avatar,
+        });
     } else {
-      console.log("user comes");
-      return res.status(401).json({ errors: { msg: "Invalid Credential" } });
+      // console.log("user comes");
+      return res.status(401).json({ errors: [{ msg: "Invalid Credentials" }] });
     }
   } catch (error) {
     console.log(error);
-    return res.status(401).json({ errors: { msg: "Invalid Credential" } });
+    return res.status(401).json({ errors: [{ msg: "Invalid Credentials" }] });
   }
 };
 
