@@ -3,7 +3,7 @@
   display: flex;
 
   .formContainer {
-    flex:3;
+    flex: 3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,9 +16,6 @@
         display: flex;
         flex-direction: column;
         gap: 5px;
-
-        label {
-        }
 
         input {
           padding: 20px;
@@ -47,7 +44,7 @@
     align-items: center;
     justify-content: center;
 
-    .avatar{
+    .avatar {
       width: 50%;
       object-fit: cover;
     }

@@ -4,6 +4,7 @@ import { Layout, RequiredAuth } from "./routes/layout/layout";
 import ListPage from "./routes/listPage/listPage";
 import Login from "./routes/login/login";
 import ProfilePage from "./routes/profilePage/profilePage";
+import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
 import Register from "./routes/register/register";
 import SinglePage from "./routes/singlePage/singlePage";
 
@@ -43,6 +44,10 @@ function App() {
         {
           path: "/profile",
           element: <ProfilePage />,
+        },
+        {
+          path: "/profile/update",
+          element: <ProfileUpdatePage />,
         },
       ],
     },
