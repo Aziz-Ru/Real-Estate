@@ -1,8 +1,10 @@
 import { Router } from "express";
+import { addPost, getposts } from "../controllers/post.controller.js";
+import { verifyJWT } from "../middlewares/tokenVerify.js";
+const router = Router({ strict: true });
 
-const route = Router({ strict: true });
-route.get("/", (req, res) => {
-  res.send("Heyy");
-});
+router.get("/:id", verifyJWT, getposts);
 
-export default route;
+router.post("/add", verifyJWT, addPost);
+
+export default router;

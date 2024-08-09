@@ -23,7 +23,7 @@ app.use(urlencoded({ extended: false }));
 
 db.connect();
 
-app.use("/api/post", postRoute);
+app.use("/api/posts", postRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 

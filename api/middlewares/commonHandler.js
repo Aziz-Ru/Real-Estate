@@ -11,7 +11,7 @@ export const ValidationErrorHandler = (req, res, next) => {
   next();
 };
 export const NotFoundHandler = (req, res, next) => {
-  next({ msg: "url not found" });
+  next([{ msg: "url not found" }]);
 };
 export const DefaultErrorHandler = (err, req, res, next) => {
   return res.status(err.status ? err.status : 400).json({ errors: err });
