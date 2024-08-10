@@ -1,10 +1,18 @@
 import { Router } from "express";
-import { addPost, getposts } from "../controllers/post.controller.js";
+import {
+  addPost,
+  deletepost,
+  getpost,
+  getposts,
+  updatepost,
+} from "../controllers/post.controller.js";
 import { verifyJWT } from "../middlewares/tokenVerify.js";
 const router = Router({ strict: true });
 
-router.get("/:id", verifyJWT, getposts);
-
-router.post("/add", verifyJWT, addPost);
+router.get("/", verifyJWT, getposts);
+router.get("/:postId", verifyJWT, getpost);
+router.post("/", verifyJWT, addPost);
+router.put("/:postId", verifyJWT, updatepost);
+router.delete("/:postId", verifyJWT, deletepost);
 
 export default router;
