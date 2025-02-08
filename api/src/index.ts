@@ -29,12 +29,14 @@ app.use(compression());
 // securing the app by setting various HTTP headers.
 app.use(helmet());
 
-app.use(cookieParser(env.JWT_SECRET_KEY));
+app.use(cookieParser());
 // enabling cors.
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 

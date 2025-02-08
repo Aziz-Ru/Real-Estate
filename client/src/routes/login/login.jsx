@@ -1,21 +1,23 @@
 import { Link, useNavigate } from "react-router-dom";
 
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import { login } from "../../lib/requests";
 import "./login.scss";
 
 function Login() {
-  // const { updateUser } = useContext(AuthContext);
+  const { updateUser } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { mutate, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ["login"],
     mutationFn: login,
     onError: (error) => {
       setError(error.response.data.errors.message);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      updateUser(data.data);
       navigate("/");
     },
   });
@@ -26,7 +28,7 @@ function Login() {
     const email = formData.get("email");
     const password = formData.get("password");
     const data = { email, password };
-    mutate(data);
+    await mutateAsync(data);
   };
 
   return (
@@ -37,7 +39,9 @@ function Login() {
           {error && <span className="error">{error}</span>}
           <input name="email" type="email" placeholder="Email" />
           <input name="password" type="password" placeholder="Password" />
-          <button disabled={isLoading}>Login</button>
+          <button disabled={isPending}>
+            {isPending ? "Loading" : "Login"}
+          </button>
           <Link to="/register">{"Don't"} you have an account?</Link>
         </form>
       </div>

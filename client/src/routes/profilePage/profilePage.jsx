@@ -1,29 +1,30 @@
+import { useMutation } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
 import { AuthContext } from "../../context/AuthContext";
-import apiRequest from "../../lib/apiRequest";
+import { logout } from "../../lib/requests";
 import "./profilePage.scss";
+
 function ProfilePage() {
   const { updateUser, currentUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogout = async () => {
-    try {
-      setIsLoading(true);
-      await apiRequest.post("/auth/logout");
+  const [error, setError] = useState(null);
+  const { isLoading, mutate } = useMutation({
+    mutationKey: ["logout"],
+    mutationFn: logout,
+    onError: (error) => {
+      console.log(error);
+      setError(error.response.data.errors.message);
+    },
+    onSuccess: () => {
       updateUser(null);
       navigate("/login");
-    } catch (err) {
-      setError(err.response.data.errors[0].msg);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
+
   return (
     <div className="profilePage">
       <div className="details">
@@ -43,13 +44,11 @@ function ProfilePage() {
                 alt=""
               />
             </span>
-            <span>
-              Username: <b>{currentUser.username}</b>
-            </span>
+
             <span>
               E-mail: <b>{currentUser.email}</b>
             </span>
-            <button disabled={isLoading} onClick={handleLogout}>
+            <button disabled={isLoading} onClick={() => mutate()}>
               Logout
             </button>
             {error && <p>{error}</p>}

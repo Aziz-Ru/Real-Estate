@@ -38,7 +38,7 @@ export const login = async (req: Request) => {
     env.JWT_SECRET_KEY
   );
 
-  return token;
+  return { token, id: existingUser.uid, email: existingUser.email };
 };
 //register
 export const register = async (req: Request) => {
@@ -52,6 +52,7 @@ export const register = async (req: Request) => {
 //logout
 export const logout = async (token: string) => {
   const payload: any = await jwt.verify(token, env.JWT_SECRET_KEY);
+
   await db
     .update(userTable)
     .set({

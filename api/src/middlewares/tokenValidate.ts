@@ -9,14 +9,12 @@ const cookieValidate = () => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payload = req.cookies.token;
-      console.log(payload);
-      const isVerified = await jwt.verify(payload, env.JWT_SECRET_KEY);
+      const isVerified = jwt.verify(payload, env.JWT_SECRET_KEY);
       if (!isVerified) {
         throw new ApiError(httpStatus.UNAUTHORIZED, "You are unauthorized");
       }
       next();
     } catch (error) {
-      //   console.log(error);
       throw new ApiError(httpStatus.UNAUTHORIZED, "You are unauthorized");
     }
   });
