@@ -1,40 +1,32 @@
-import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
-import apiRequest from "../../lib/apiRequest";
+
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { login } from "../../lib/requests";
 import "./login.scss";
 
 function Login() {
-  const { updateUser } = useContext(AuthContext);
-
+  // const { updateUser } = useContext(AuthContext);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: login,
+    onError: (error) => {
+      setError(error.response.data.errors.message);
+    },
+    onSuccess: () => {
+      navigate("/");
+    },
+  });
 
   const formHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const email = formData.get("email");
     const password = formData.get("password");
-    try {
-      setIsLoading(true);
-      setError("");
-      const res = await apiRequest.post(
-        "http://localhost:5000/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-
-      updateUser(res.data);
-      
-      navigate("/");
-    } catch (err) {
-      setError(err.response.data.errors[0].msg);
-    } finally {
-      setIsLoading(false);
-    }
+    const data = { email, password };
+    mutate(data);
   };
 
   return (
@@ -42,7 +34,7 @@ function Login() {
       <div className="formContainer">
         <form onSubmit={formHandler}>
           <h1>Welcome back</h1>
-          {error && <p className="error">{error}</p>}
+          {error && <span className="error">{error}</span>}
           <input name="email" type="email" placeholder="Email" />
           <input name="password" type="password" placeholder="Password" />
           <button disabled={isLoading}>Login</button>

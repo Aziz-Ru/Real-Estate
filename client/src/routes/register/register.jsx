@@ -16,7 +16,7 @@ function Register() {
     try {
       setIsLoading(true);
       setError("");
-      await apiRequest.post("http://localhost:5000/api/auth/register", {
+      await apiRequest.post("/auth/register", {
         username,
         email,
         password,

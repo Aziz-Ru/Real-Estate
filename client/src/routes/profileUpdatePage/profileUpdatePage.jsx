@@ -1,9 +1,9 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
-import { storage } from "../../lib/firebaseConfig.js";
+// import { storage } from "../../lib/firebaseConfig.js";
 import "./profileUpdatePage.scss";
 
 function ProfileUpdatePage() {
@@ -16,35 +16,37 @@ function ProfileUpdatePage() {
     setError("");
     const formData = new FormData(e.target);
 
+    // eslint-disable-next-line no-unused-vars
     const { username, password, email, avatar } = Object.fromEntries(formData);
 
-    if (
-      avatar.name &&
-      avatar.type != "image/png" &&
-      avatar.type != "image/jpg" &&
-      avatar.type != "image/jpeg"
-    ) {
-      setError("jpg,jpeg or png image required");
-      return;
-    }
+    // if (
+    //   avatar.name &&
+    //   avatar.type != "image/png" &&
+    //   avatar.type != "image/jpg" &&
+    //   avatar.type != "image/jpeg"
+    // ) {
+    //   setError("jpg,jpeg or png image required");
+    //   return;
+    // }
 
     try {
       setIsLoading(true);
-      let imgUrl;
-      if (avatar.name != "") {
-        const imageRef = ref(
-          storage,
-          `images/${currentUser.id}-${avatar.name}`
-        );
-        await uploadBytes(imageRef, avatar);
-        imgUrl = await getDownloadURL(imageRef);
-        // console.log("Uploaded Successfully" + imgUrl);
-      }
+      // let imgUrl;
+      // if (avatar.name != "") {
+      //   const imageRef = ref(
+      //     storage,
+      //     `images/${currentUser.id}-${avatar.name}`
+      //   );
+      //   await uploadBytes(imageRef, avatar);
+      //   imgUrl = await getDownloadURL(imageRef);
+      //   // console.log("Uploaded Successfully" + imgUrl);
+      // }
       const res = await apiRequest.put(`/user/${currentUser.id}`, {
         username,
         email,
         password,
-        avatar: imgUrl || "",
+        avatar: "",
+        // imgUrl ||
       });
 
       updateUser(res.data);
