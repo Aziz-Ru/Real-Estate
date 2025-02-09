@@ -8,6 +8,20 @@
       "when": 1739038286999,
       "tag": "0000_uneven_salo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1739115980214,
+      "tag": "0001_bright_maestro",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1739123193151,
+      "tag": "0002_careless_bullseye",
+      "breakpoints": true
     }
   ]
 }
