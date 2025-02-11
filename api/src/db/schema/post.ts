@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   decimal,
   integer,
@@ -54,3 +55,34 @@ export const postDetailTable = pgTable("post_details", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(), // ,
 });
+
+export const postImageTable = pgTable("post_images", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  postId: uuid("post_id")
+    .notNull()
+    .references(() => postTable.id),
+  img: varchar("img", { length: 555 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const postRelation = relations(postTable, ({ many, one }) => ({
+  postDetail: one(postDetailTable, {
+    fields: [postTable.id],
+    references: [postDetailTable.postId],
+  }),
+  postImages: many(postImageTable),
+}));
+
+export const postDetailRelation = relations(postDetailTable, ({ one }) => ({
+  post: one(postTable, {
+    fields: [postDetailTable.postId],
+    references: [postTable.id],
+  }),
+}));
+
+export const postImageRelation = relations(postImageTable, ({ one }) => ({
+  post: one(postTable, {
+    fields: [postImageTable.postId],
+    references: [postTable.id],
+  }),
+}));

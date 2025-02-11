@@ -8,6 +8,7 @@
     "dev": "node --import=tsx --watch src/index.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
+    "db:truncate": "node --import=tsx ./src/db/truncate.ts",
     "db:seed": "ts-node ./src/db/seed/index.ts"
   },
   "keywords": [],

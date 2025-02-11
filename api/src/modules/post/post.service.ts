@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { Request } from "express";
 import db from "../../db";
-import { postDetailTable, postTable } from "../../db/schema";
+import { postDetailTable, postImageTable, postTable } from "../../db/schema";
 import ApiError from "../../utils/ApiError";
 
 export const getAllPostOfUser = async () => {
@@ -40,7 +40,7 @@ export const createPostServices = async (req: Request) => {
         type: body.type,
         propertyType: body.propertyType,
         userId: body.userId,
-        img: body.img,
+        img: body.img[0],
       })
       .returning({
         id: postTable.id,
@@ -55,6 +55,14 @@ export const createPostServices = async (req: Request) => {
       school: body.school,
       resturant: body.resturant,
     });
+    const imges = body.img.map((img: string) => {
+      return {
+        postId: post[0].id,
+        img: img,
+      };
+    });
+    console.log(imges);
+    await trx.insert(postImageTable).values([...imges]);
   });
 };
 

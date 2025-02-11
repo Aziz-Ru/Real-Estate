@@ -41,13 +41,13 @@ const postSchema = z.object({
     message:
       "Property type must be APARTMENT, HOUSE, COMMERCIAL, LAND or OTHER",
   }),
-  img: z
-    .string({
-      message: "Image must be a string",
-    })
-    .url({
-      message: "Image must be a valid URL",
-    }),
+  img: z.array(
+    z
+      .string({
+        message: "Image must be a string",
+      })
+      .url({ message: "Image must be a valid URL" })
+  ),
   description: z.string({
     message: "Description must be a string",
   }),
@@ -72,7 +72,7 @@ const postSchema = z.object({
     .number({
       message: "School must be a number",
     })
-    .max(1, { message: "School must be at most 1" })
+    .max(5000, { message: "School must be at most 5000km" })
     .optional(),
   resturant: z
     .number({
