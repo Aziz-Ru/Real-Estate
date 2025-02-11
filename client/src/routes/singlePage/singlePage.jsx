@@ -1,14 +1,33 @@
-import "./singlePage.scss";
+import { useParams } from "react-router-dom";
+
+import { useQuery } from "@tanstack/react-query";
 import Slider from "../../components/slider/Slider";
-import Map from "../../components/map/Map";
-import { singlePostData, userData } from "../../lib/dummydata";
+import { getSinglePost } from "../../lib/requests";
+import "./singlePage.scss";
 
 function SinglePage() {
+  const { id } = useParams();
+  const {
+    data: singlePostData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["singlePost", id],
+    queryFn: () => getSinglePost(id),
+    enabled: !!id,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error</div>;
+
+  const post = singlePostData.data.posts;
+  const postDetails = singlePostData.data.post_details;
+  console.log(post);
   return (
     <div className="singlePage">
       <div className="details">
         <div className="wrapper">
-          <Slider images={singlePostData.images} />
+          <Slider images={post.img} />
           <div className="info">
             <div className="top">
               <div className="post">
@@ -20,8 +39,8 @@ function SinglePage() {
                 <div className="price">$ {singlePostData.price}</div>
               </div>
               <div className="user">
-                <img src={userData.img} alt="" />
-                <span>{userData.name}</span>
+                {/* <img src={userData.img} alt="" />
+                <span>{userData.name}</span> */}
               </div>
             </div>
             <div className="bottom">{singlePostData.description}</div>
@@ -43,7 +62,11 @@ function SinglePage() {
               <img src="/pet.png" alt="" />
               <div className="featureText">
                 <span>Pet Policy</span>
-                <p>Pets Allowed</p>
+                <p>
+                  {postDetails.petPolicy == "YES"
+                    ? "Pets Allowed"
+                    : "Pets NotAllowed"}
+                </p>
               </div>
             </div>
             <div className="feature">
@@ -58,15 +81,15 @@ function SinglePage() {
           <div className="sizes">
             <div className="size">
               <img src="/size.png" alt="" />
-              <span>80 sqft</span>
+              <span>{postDetails.size} sqft</span>
             </div>
             <div className="size">
               <img src="/bed.png" alt="" />
-              <span>2 beds</span>
+              <span>{post.bedroom} beds</span>
             </div>
             <div className="size">
               <img src="/bath.png" alt="" />
-              <span>1 bathroom</span>
+              <span>{post.bathroom} bathroom</span>
             </div>
           </div>
           <p className="title">Nearby Places</p>
@@ -75,27 +98,27 @@ function SinglePage() {
               <img src="/school.png" alt="" />
               <div className="featureText">
                 <span>School</span>
-                <p>250m away</p>
+                <p>{postDetails.school} away</p>
               </div>
             </div>
             <div className="feature">
               <img src="/pet.png" alt="" />
               <div className="featureText">
                 <span>Bus Stop</span>
-                <p>100m away</p>
+                <p> {postDetails.school} away</p>
               </div>
             </div>
             <div className="feature">
               <img src="/fee.png" alt="" />
               <div className="featureText">
                 <span>Restaurant</span>
-                <p>200m away</p>
+                <p>{postDetails.resturant}m away</p>
               </div>
             </div>
           </div>
           <p className="title">Location</p>
           <div className="mapContainer">
-            <Map items={[singlePostData]} />
+            {/* <Map items={[singlePostData]} /> */}
           </div>
           <div className="buttons">
             <button>

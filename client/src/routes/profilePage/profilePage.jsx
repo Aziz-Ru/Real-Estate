@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Chat from "../../components/chat/Chat";
-import List from "../../components/list/List";
+import PostList from "../../components/list/List";
 import { AuthContext } from "../../context/AuthContext";
 import { logout } from "../../lib/requests";
 import "./profilePage.scss";
@@ -55,13 +55,15 @@ function ProfilePage() {
           </div>
           <div className="title">
             <h1>My List</h1>
-            <button>Create New Post</button>
+            <Link to={"/add"}>
+              <button>Create New Post</button>
+            </Link>
           </div>
-          <List />
+          <PostList />
           <div className="title">
             <h1>Saved List</h1>
           </div>
-          <List />
+          {/* <List /> */}
         </div>
       </div>
       <div className="chatContainer">
