@@ -5,8 +5,15 @@ import {
   deletePostServices,
   getAllPostOfUser,
   getPostById,
+  getPostBySearchParams,
   updatePostServices,
 } from "./post.service";
+
+export const getSearchedPost = catchAsync(
+  async (req: Request, res: Response) => {
+    return res.status(200).json({ data: await getPostBySearchParams(req) });
+  }
+);
 
 export const getAllPost = catchAsync(async (req: Request, res: Response) => {
   return res.status(200).json({ data: await getAllPostOfUser() });

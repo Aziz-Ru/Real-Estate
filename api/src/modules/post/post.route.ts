@@ -17,6 +17,7 @@ router
   .get(cookieValidate(), getAllPost)
   .post(cookieValidate(), validate(postCreateSchema), createPost);
 
+router.route("/user").get(cookieValidate(), getAllPost);
 router
   .route("/:id")
   .get(cookieValidate(), getPost)

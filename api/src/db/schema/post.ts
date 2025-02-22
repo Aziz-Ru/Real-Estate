@@ -43,7 +43,7 @@ export const postDetailTable = pgTable("post_details", {
   id: uuid("id").defaultRandom().primaryKey(),
   postId: uuid("post_id")
     .notNull()
-    .references(() => postTable.id)
+    .references(() => postTable.id, { onDelete: "cascade" })
     .unique(),
   description: text("description").notNull(),
   utility: varchar("utility", { length: 255 }),
@@ -60,7 +60,7 @@ export const postImageTable = pgTable("post_images", {
   id: uuid("id").defaultRandom().primaryKey(),
   postId: uuid("post_id")
     .notNull()
-    .references(() => postTable.id),
+    .references(() => postTable.id, { onDelete: "cascade" }),
   img: varchar("img", { length: 555 }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
